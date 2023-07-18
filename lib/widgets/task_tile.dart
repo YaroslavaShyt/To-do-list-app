@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../screens/edit_task_screen.dart';
+import 'package:taskapp/constants/colors.dart';
+import 'package:taskapp/services/date_getter.dart';
+import '../screens/pending_screen/widgets/edit_task_screen.dart';
 import 'popup_menu.dart';
 import 'package:intl/intl.dart';
 
@@ -16,10 +18,18 @@ class TaskTile extends StatelessWidget {
 
   void _removeOrDeleteTask(BuildContext ctx, Task task) {
     task.isDeleted!
-        ? {ctx.read<TasksBloc>().add(DeleteTask(task: task)),
-            ctx.read<TasksBloc>().add(GetAllTasks())}
-        : {ctx.read<TasksBloc>().add(RemoveTask(task: task)),
-            ctx.read<TasksBloc>().add(GetAllTasks())};
+        ? {
+            ctx.read<TasksBloc>().add(DeleteTask(task: task)),
+            ctx
+                .read<TasksBloc>()
+                .add(GetTodayTasks(date: Date.dateFormat.format(Date.now)))
+          }
+        : {
+            ctx.read<TasksBloc>().add(RemoveTask(task: task)),
+            ctx
+                .read<TasksBloc>()
+                .add(GetTodayTasks(date: Date.dateFormat.format(Date.now)))
+          };
   }
 
   void _editTask(BuildContext context) {
@@ -46,67 +56,74 @@ class TaskTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: Row(
-              children: [
-                task.isFavorite == false
-                    ? const Icon(Icons.star_outline)
-                    : const Icon(Icons.star),
-                const SizedBox(
-                  width: 10,
+            child: Container(
+              decoration: const BoxDecoration(
+                  border: Border(
+                bottom: BorderSide(
+                  color: AppColors.lightPurple,
+                  width: 1.0,
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        task.title,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 18,
-                          decoration:
-                              task.isDone! ? TextDecoration.lineThrough : null,
+              )),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          task.title,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontFamily: 'Nunito',
+                            fontWeight: FontWeight.w600,
+                            decoration: task.isDone!
+                                ? TextDecoration.lineThrough
+                                : null,
+                          ),
                         ),
-                      ),
-                      Text(
-                        DateFormat()
-                            .add_yMMMd()
-                            .add_Hms()
-                            .format(DateTime.parse(task.date)),
-                      ),
-                    ],
+                        Text(task.date),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Row(
             children: [
               Checkbox(
+                activeColor: AppColors.darkGreen,
                 value: task.isDone,
                 onChanged: task.isDeleted == false
                     ? (value) {
                         context.read<TasksBloc>().add(UpdateTask(task: task));
-                        context.read<TasksBloc>().add(GetAllTasks());
+                        context.read<TasksBloc>().add(GetTodayTasks(
+                            date: Date.dateFormat.format(Date.now)));
                       }
                     : null,
               ),
               PopupMenu(
-                task: task,
-                cancelOrDeleteCallback: () =>
-                    _removeOrDeleteTask(context, task),
-                likeOrDislikeCallback: (){
-                  context.read<TasksBloc>().add(
-                      MarkFavoriteOrUnfavoriteTask(task: task));
-                      context.read<TasksBloc>().add(GetAllTasks());
-                    },
-                editTaskCallback: () {
-                  Navigator.of(context).pop();
-                  _editTask(context);
-                },
-                restoreTaskCallback: () {
-                  context.read<TasksBloc>().add(RestoreTask(task: task));
-                  context.read<TasksBloc>().add(GetAllTasks());
-                }),
+                  task: task,
+                  cancelOrDeleteCallback: () =>
+                      _removeOrDeleteTask(context, task),
+                  likeOrDislikeCallback: () {
+                    context
+                        .read<TasksBloc>()
+                        .add(MarkFavoriteOrUnfavoriteTask(task: task));
+                    context.read<TasksBloc>().add(
+                        GetTodayTasks(date: Date.dateFormat.format(Date.now)));
+                  },
+                  editTaskCallback: () {
+                    Navigator.of(context).pop();
+                    _editTask(context);
+                  },
+                  restoreTaskCallback: () {
+                    context.read<TasksBloc>().add(RestoreTask(task: task));
+                    context.read<TasksBloc>().add(
+                        GetTodayTasks(date: Date.dateFormat.format(Date.now)));
+                  }),
             ],
           ),
         ],

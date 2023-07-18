@@ -2,12 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:taskapp/firebase_options.dart';
-import 'package:taskapp/screens/login_screen.dart';
-import 'package:taskapp/screens/register_screen.dart';
-import 'package:taskapp/screens/splash_screen.dart';
+import 'package:taskapp/screens/tabs/widgets/splash_screen.dart';
 
 import 'blocs/bloc_exports.dart';
-import 'screens/tabs_screen.dart';
 import 'services/app_router.dart';
 import 'services/app_theme.dart';
 
@@ -45,6 +42,7 @@ class MyApp extends StatelessWidget {
                 : AppThemes.appThemeData[AppTheme.lightTheme],
             home: const SplashScreen(),
             onGenerateRoute: appRouter.onGenerateRoute,
+
           );
         },
       ),

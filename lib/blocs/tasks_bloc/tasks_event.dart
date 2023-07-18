@@ -97,3 +97,10 @@ class GetAllTasks extends TasksEvent{
   @override
   List<Object> get props => [];
 }
+
+class GetTodayTasks extends TasksEvent{
+  final String date;
+  const GetTodayTasks({required this.date});
+  @override
+  List<Object> get props => [date];
+}

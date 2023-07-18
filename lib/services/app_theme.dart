@@ -26,6 +26,7 @@ class AppThemes {
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Colors.grey, unselectedItemColor: Colors.white),
+      useMaterial3: true,
     ),
 
     //
@@ -53,6 +54,7 @@ class AppThemes {
           backgroundColor: Colors.grey,
           selectedItemColor: Colors.black,
           unselectedItemColor: Colors.white),
+      useMaterial3: true,
     ),
   };
 }
