@@ -31,8 +31,6 @@ class _CarouselState extends State<Carousel> {
             enlargeCenterPage: true,
             enableInfiniteScroll: false,
             onPageChanged: (index, reason) {
-              final selectedCategory = widget.categories[index];
-
               setState(() {
                 widget.current = index;
               });

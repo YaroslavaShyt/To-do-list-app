@@ -3,8 +3,6 @@ import 'package:taskapp/constants/colors.dart';
 import 'package:taskapp/services/date_getter.dart';
 import '../screens/pending_screen/widgets/edit_task_screen.dart';
 import 'popup_menu.dart';
-import 'package:intl/intl.dart';
-
 import '../blocs/bloc_exports.dart';
 import 'package:taskapp/models/task.dart';
 
